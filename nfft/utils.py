@@ -52,25 +52,30 @@ def nfft_matrix(x, n, m, sigma, kernel, truncated):
 def fourier_sum(ghat, N, n, use_fft=True):
     """Evaluate the Fourier transform at N <= n points"""
     assert len(ghat) == N
+    assert n >= N
+    assert N % 2 == n % 2 == 0
     if use_fft:
-        ghat_n = np.zeros(n, dtype=ghat.dtype)
-        ghat_n[(n - N) / 2: (n + N) / 2] = ghat
-        g = np.fft.fftshift(np.fft.fft(np.fft.fftshift(ghat_n)))
+        ghat_n = np.concatenate([ghat[N / 2:],
+                                 np.zeros(n - N, dtype=ghat.dtype),
+                                 ghat[:N / 2]])
+        g = np.fft.fftshift(np.fft.fft(ghat_n))
     else:
         k = -(N // 2) + np.arange(N)
-        x_grid = np.linspace(-0.5, 0.5, n, endpoint=False)
-        g = np.dot(ghat, np.exp(-2j * np.pi * k[:, None] * x_grid))
+        x_grid = np.linspace(-0.5, 0.5, n, endpoint=False)[:, None]
+        g = np.exp(-2j * np.pi * k * x_grid).dot(ghat)
     return g
 
 
 def inv_fourier_sum(g, N, n, use_fft=True):
     """Evaluate the inverse Fourier transform at N <= n points"""
     assert len(g) == n
+    assert n >= N
+    assert N % 2 == n % 2 == 0
     if use_fft:
-        ghat_n = np.fft.fftshift(np.fft.ifft(np.fft.fftshift(g)))
-        ghat = n * ghat_n[(n - N) / 2:(n + N) / 2]
+        ghat_n = np.fft.ifft(np.fft.fftshift(g))
+        ghat = n * np.concatenate([ghat_n[-N / 2:], ghat_n[:N / 2]])
     else:
-        k = -(N // 2) + np.arange(N)
+        k = -(N // 2) + np.arange(N)[:, None]
         x_grid = np.linspace(-0.5, 0.5, n, endpoint=False)
-        ghat = np.dot(g, np.exp(2j * np.pi * k * x_grid[:, None]))
+        ghat = np.exp(2j * np.pi * k * x_grid).dot(g)
     return ghat
