@@ -104,6 +104,7 @@ def nfft(x, f_hat, sigma=3, tol=1E-8, m=None, kernel='gaussian',
     truncated : bool (optional, default=True)
         If True, use a fast truncated approximate summation matrix.
         If False, use a slow full summation matrix.
+
     Returns
     -------
     f : ndarray, shape=(M,)

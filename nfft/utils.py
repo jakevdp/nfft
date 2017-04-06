@@ -1,5 +1,6 @@
 import numpy as np
-from scipy.sparse import csr_matrix
+
+from scipy import fftpack, sparse
 
 
 def shifted(x):
@@ -40,8 +41,8 @@ def nfft_matrix(x, n, m, sigma, kernel, truncated):
         val = kernel.phi(shifted(x[:, None] - col_ind / n), n, m, sigma)
         col_ind = (col_ind + n // 2) % n
         indptr = np.arange(len(x) + 1) * col_ind.shape[1]
-        mat = csr_matrix((val.ravel(), col_ind.ravel(), indptr),
-                         shape=(len(x), n))
+        mat = sparse.csr_matrix((val.ravel(), col_ind.ravel(), indptr),
+                                shape=(len(x), n))
     else:
         x_grid = np.linspace(-0.5, 0.5, n, endpoint=False)
         mat = kernel.phi(shifted(x_grid - x[:, None]), n, m, sigma)
@@ -58,7 +59,7 @@ def fourier_sum(ghat, N, n, use_fft=True):
         ghat_n = np.concatenate([ghat[N // 2:],
                                  np.zeros(n - N, dtype=ghat.dtype),
                                  ghat[:N // 2]])
-        g = np.fft.fftshift(np.fft.fft(ghat_n))
+        g = fftpack.fftshift(fftpack.fft(ghat_n))
     else:
         k = -(N // 2) + np.arange(N)
         x_grid = np.linspace(-0.5, 0.5, n, endpoint=False)[:, None]
@@ -72,7 +73,7 @@ def inv_fourier_sum(g, N, n, use_fft=True):
     assert n >= N
     assert N % 2 == n % 2 == 0
     if use_fft:
-        ghat_n = np.fft.ifft(np.fft.fftshift(g))
+        ghat_n = fftpack.ifft(fftpack.fftshift(g))
         ghat = n * np.concatenate([ghat_n[-N // 2:], ghat_n[:N // 2]])
     else:
         k = -(N // 2) + np.arange(N)[:, None]
