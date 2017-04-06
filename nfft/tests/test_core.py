@@ -3,7 +3,7 @@ import numpy as np
 import pytest
 from numpy.testing import assert_allclose, assert_array_less
 
-from ..core import indft, infft
+from ..core import ndft_adjoint, nfft_adjoint
 
 
 def generate_data(N, amp=1, rseed=0):
@@ -21,8 +21,9 @@ def generate_data(N, amp=1, rseed=0):
 def test_infft_slow(N, Nf, sigma, use_fft, use_sparse):
     x, f = generate_data(N)
 
-    direct = indft(x, f, Nf)
-    approx = infft(x, f, Nf, sigma=sigma, use_fft=use_fft, use_sparse=use_sparse)
+    direct = ndft_adjoint(x, f, Nf)
+    approx = nfft_adjoint(x, f, Nf, sigma=sigma,
+                          use_fft=use_fft, use_sparse=use_sparse)
 
     assert_allclose(direct, approx)
 
@@ -34,7 +35,7 @@ def test_infft_slow(N, Nf, sigma, use_fft, use_sparse):
 @pytest.mark.parametrize('sigma', [2, 3, 4, 5])
 def test_tol(N, Nf, tol, amp, sigma):
     x, f = generate_data(N, amp=amp)
-    direct = indft(x, f, Nf)
-    approx = infft(x, f, Nf, sigma=sigma, tol=tol)
+    direct = ndft_adjoint(x, f, Nf)
+    approx = nfft_adjoint(x, f, Nf, sigma=sigma, tol=tol)
     observed_diff = abs(direct - approx)
-    assert observed_diff.max() < tol * abs(f).sum()
+    assert observed_diff.max() < tol * abs(direct).sum()

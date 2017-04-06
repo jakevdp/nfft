@@ -16,6 +16,14 @@ class NFFTKernel(object):
     def m_from_C(self, C, sigma):
         raise NotImplementedError()
 
+    def estimate_m(self, tol, N, sigma):
+        # TODO: this should be computed in terms of the L1-norm of the true
+        #   Fourier coefficients... see p. 11 of
+        #   https://www-user.tu-chemnitz.de/~potts/nfft/guide/nfft3.pdf
+        #   Need to think about how to estimate the value of m more accurately
+        C = tol / N
+        return self.m_from_C(C, sigma)
+
 
 class GaussianKernel(NFFTKernel):
     def _b(self, sigma, m):
