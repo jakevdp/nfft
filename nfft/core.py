@@ -1,7 +1,6 @@
 from __future__ import division
 
 import numpy as np
-from scipy.sparse import csr_matrix
 
 from .kernels import KERNELS
 from .utils import nfft_matrix, fourier_sum, inv_fourier_sum
