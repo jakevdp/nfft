@@ -3,7 +3,7 @@ import numpy as np
 import pytest
 from numpy.testing import assert_allclose, assert_array_less
 
-from ..core import ndft, nfft, ndft_adjoint, nfft_adjoint
+from .. import ndft, nfft, ndft_adjoint, nfft_adjoint
 
 
 def generate_data(N, Nf, amp=1, rseed=0):
@@ -29,7 +29,7 @@ def test_nfft_slow(N, Nf, sigma, use_fft, use_sparse):
     x, f_hat = generate_data(N, Nf)
 
     direct = ndft(x, f_hat)
-    approx = nfft(x, f_hat, sigma=sigma,
+    approx = nfft(x, f_hat, sigma=sigma, tol=1E-8,
                   use_fft=use_fft, use_sparse=use_sparse)
 
     assert_allclose(direct, approx)
@@ -59,7 +59,7 @@ def test_nfft_adjoint_slow(N, Nf, sigma, use_fft, use_sparse):
     x, f = generate_adjoint_data(N)
 
     direct = ndft_adjoint(x, f, Nf)
-    approx = nfft_adjoint(x, f, Nf, sigma=sigma,
+    approx = nfft_adjoint(x, f, Nf, sigma=sigma, tol=1E-8,
                           use_fft=use_fft, use_sparse=use_sparse)
 
     assert_allclose(direct, approx)

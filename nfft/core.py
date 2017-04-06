@@ -71,16 +71,16 @@ def nfft(x, f_hat, sigma=5, tol=1E-8, m=None, kernel='gaussian',
     k = -(N // 2) + np.arange(N)
     ghat = f_hat / kernel.phi_hat(k, n, m, sigma) / n
 
-    # Compute the Fourier transform over this grid
+    # Compute the Fourier transform over the expanded grid
     if use_fft:
-        ghat_n = np.zeros(n, dtype=complex)
+        ghat_n = np.zeros(n, dtype=ghat.dtype)
         ghat_n[n // 2 - N // 2: n // 2 + N // 2] = ghat
         g = np.fft.fftshift(np.fft.fft(np.fft.fftshift(ghat_n)))
     else:
         x_grid = np.linspace(-0.5, 0.5, n, endpoint=False)
         g = np.dot(ghat, np.exp(-2j * np.pi * k[:, None] * x_grid))
 
-    # Compute the (truncated) sum across the grid
+    # Compute the (truncated) sum across the expanded grid
     shifted = lambda x: -0.5 + (x + 0.5) % 1
     if use_sparse:
         col_ind = np.floor(n * x[:, np.newaxis]).astype(int) + np.arange(-m, m)
