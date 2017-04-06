@@ -78,7 +78,7 @@ def ndft_adjoint(x, f, N):
     return np.dot(f, np.exp(2j * np.pi * k * x[:, None]))
 
 
-def nfft(x, f_hat, sigma=5, tol=1E-8, m=None, kernel='gaussian',
+def nfft(x, f_hat, sigma=3, tol=1E-8, m=None, kernel='gaussian',
          use_fft=True, truncated=True):
     """Compute the nonuniform fast Fourier transform
 
@@ -146,7 +146,7 @@ def nfft(x, f_hat, sigma=5, tol=1E-8, m=None, kernel='gaussian',
     return f
 
 
-def nfft_adjoint(x, f, N, sigma=5, tol=1E-8, m=None, kernel='gaussian',
+def nfft_adjoint(x, f, N, sigma=3, tol=1E-8, m=None, kernel='gaussian',
                  use_fft=True, truncated=True):
     """Compute the adjoint nonuniform fast Fourier transform
 
