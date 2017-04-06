@@ -55,9 +55,9 @@ def fourier_sum(ghat, N, n, use_fft=True):
     assert n >= N
     assert N % 2 == n % 2 == 0
     if use_fft:
-        ghat_n = np.concatenate([ghat[N / 2:],
+        ghat_n = np.concatenate([ghat[N // 2:],
                                  np.zeros(n - N, dtype=ghat.dtype),
-                                 ghat[:N / 2]])
+                                 ghat[:N // 2]])
         g = np.fft.fftshift(np.fft.fft(ghat_n))
     else:
         k = -(N // 2) + np.arange(N)
@@ -73,7 +73,7 @@ def inv_fourier_sum(g, N, n, use_fft=True):
     assert N % 2 == n % 2 == 0
     if use_fft:
         ghat_n = np.fft.ifft(np.fft.fftshift(g))
-        ghat = n * np.concatenate([ghat_n[-N / 2:], ghat_n[:N / 2]])
+        ghat = n * np.concatenate([ghat_n[-N // 2:], ghat_n[:N // 2]])
     else:
         k = -(N // 2) + np.arange(N)[:, None]
         x_grid = np.linspace(-0.5, 0.5, n, endpoint=False)
