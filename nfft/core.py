@@ -8,19 +8,27 @@ from .utils import nfft_matrix, fourier_sum, inv_fourier_sum
 
 
 def ndft(x, f_hat):
-    """Compute the nonuniform DFT
+    """Compute the nonuniform direct Fourier transform
+
+    f_j = \sum_{-N/2 \le k < N/2} \hat{f}_k \exp(-2 \pi i k x_j)
 
     Parameters
     ----------
-    TODO
+    x : array_like, shape=(M,)
+        The locations of the data points.
+    f_hat : array_like, shape=(N,)
+        The amplitudes at each wave number k = range(-N/2, N/2)
 
     Returns
     -------
-    TODO
+    f : ndarray, shape=(M,)
+        The direct Fourier summation corresponding to x
 
     See Also
     --------
-    infft : inverse nonuniform FFT
+    nfft : nonuniform fast Fourier transform
+    ndft_adjoint : adjoint nonuniform direct Fourier transform
+    nfft_adjoint : adjoint nonuniform fast Fourier transform
     """
     x, f_hat = map(np.asarray, (x, f_hat))
     assert x.ndim == 1
@@ -34,19 +42,31 @@ def ndft(x, f_hat):
 
 
 def ndft_adjoint(x, f, N):
-    """Compute the adjoint of the nonuniform DFT
+    """Compute the adjoint nonuniform direct Fourier transform
+
+    \hat{f}_k = \sum_{0 \le j < N} f_j \exp(2 \pi i k x_j)
+
+    where k = range(-N/2, N/2)
 
     Parameters
     ----------
-    TODO
+    x : array_like, shape=(M,)
+        The locations of the data points.
+    f : array_like, shape=(M,)
+        The amplitudes at each location x
+    N : int
+        The number of frequencies at which to evaluate the result
 
     Returns
     -------
-    TODO
+    f_hat : ndarray, shape=(N,)
+        The amplitudes corresponding to each wave number k = range(-N/2, N/2)
 
     See Also
     --------
-    infft : inverse nonuniform FFT
+    nfft_adjoint : adjoint nonuniform fast Fourier transform
+    ndft : nonuniform direct Fourier transform
+    nfft : nonuniform fast Fourier transform
     """
     x, f = np.broadcast_arrays(x, f)
     assert x.ndim == 1
@@ -60,6 +80,42 @@ def ndft_adjoint(x, f, N):
 
 def nfft(x, f_hat, sigma=5, tol=1E-8, m=None, kernel='gaussian',
          use_fft=True, truncated=True):
+    """Compute the nonuniform fast Fourier transform
+
+    f_j = \sum_{-N/2 \le k < N/2} \hat{f}_k \exp(-2 \pi i k x_j)
+
+    Parameters
+    ----------
+    x : array_like, shape=(M,)
+        The locations of the data points. Each value in x should lie
+        in the range [-1/2, 1/2).
+    f_hat : array_like, shape=(N,)
+        The amplitudes at each wave number k = range(-N/2, N/2).
+    sigma : int (optional, default=5)
+        The oversampling factor for the FFT gridding.
+    tol : float (optional, default=1E-8)
+        The desired tolerance of the truncation approximation.
+    m : int (optional)
+        The half-width of the truncated window. If not specified, ``m`` will
+        be estimated based on ``tol``.
+    kernel : string or NFFTKernel (optional, default='gaussian')
+        The desired convolution kernel for the calculation.
+    use_fft : bool (optional, default=True)
+        If True, use the FFT rather than DFT for fast computation.
+    truncated : bool (optional, default=True)
+        If True, use a fast truncated approximate summation matrix.
+        If False, use a slow full summation matrix.
+    Returns
+    -------
+    f : ndarray, shape=(M,)
+        The approximate Fourier summation evaluated at points x
+
+    See Also
+    --------
+    ndft : nonuniform direct Fourier transform
+    nfft_adjoint : adjoint nonuniform fast Fourier transform
+    ndft_adjoint : adjoint nonuniform direct Fourier transform
+    """
     # Validate inputs
     x, f_hat = map(np.asarray, (x, f_hat))
     assert x.ndim == 1
@@ -92,19 +148,46 @@ def nfft(x, f_hat, sigma=5, tol=1E-8, m=None, kernel='gaussian',
 
 def nfft_adjoint(x, f, N, sigma=5, tol=1E-8, m=None, kernel='gaussian',
                  use_fft=True, truncated=True):
-    """Compute the inverse nonuniform FFT
+    """Compute the adjoint nonuniform fast Fourier transform
+
+    \hat{f}_k = \sum_{0 \le j < N} f_j \exp(2 \pi i k x_j)
+
+    where k = range(-N/2, N/2)
 
     Parameters
     ----------
-    TODO
+    x : array_like, shape=(M,)
+        The locations of the data points.
+    f : array_like, shape=(M,)
+        The amplitudes at each location x
+    N : int
+        The number of frequencies at which to evaluate the result
+    sigma : int (optional, default=5)
+        The oversampling factor for the FFT gridding.
+    tol : float (optional, default=1E-8)
+        The desired tolerance of the truncation approximation.
+    m : int (optional)
+        The half-width of the truncated window. If not specified, ``m`` will
+        be estimated based on ``tol``.
+    kernel : string or NFFTKernel (optional, default='gaussian')
+        The desired convolution kernel for the calculation.
+    use_fft : bool (optional, default=True)
+        If True, use the FFT rather than DFT for fast computation.
+    truncated : bool (optional, default=True)
+        If True, use a fast truncated approximate summation matrix.
+        If False, use a slow full summation matrix.
 
     Returns
     -------
-    TODO
+    f_hat : ndarray, shape=(N,)
+        The approximate amplitudes corresponding to each wave number
+        k = range(-N/2, N/2)
 
     See Also
     --------
-    indft : inverse nonuniform DFT
+    ndft_adjoint : adjoint nonuniform direct Fourier transform
+    nfft : nonuniform fast Fourier transform
+    ndft : nonuniform direct Fourier transform
     """
     # Validate inputs
     x, f = np.broadcast_arrays(x, f)

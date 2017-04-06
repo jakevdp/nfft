@@ -44,4 +44,7 @@ class GaussianKernel(NFFTKernel):
         return np.ceil(-np.log(0.25 * C) / (np.pi * (1 - 1 / (2 * sigma - 1))))
 
 
+# TODO: implement some other kernels from the literature
+
+
 KERNELS = dict(gaussian=GaussianKernel())
