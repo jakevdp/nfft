@@ -133,6 +133,7 @@ def nfft(x, f_hat, sigma=3, tol=1E-8, m=None, kernel='gaussian',
 
     if m is None:
         m = kernel.estimate_m(tol, N, sigma)
+    m = int(m)
     assert m <= n // 2
 
     k = -(N // 2) + np.arange(N)
@@ -205,6 +206,7 @@ def nfft_adjoint(x, f, N, sigma=3, tol=1E-8, m=None, kernel='gaussian',
 
     if m is None:
         m = kernel.estimate_m(tol, N, sigma)
+    m = int(m)
     assert m <= n // 2
 
     k = -(N // 2) + np.arange(N)

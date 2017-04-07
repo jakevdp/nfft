@@ -4,6 +4,8 @@ import pytest
 from numpy.testing import assert_allclose
 
 from .. import ndft, nfft, ndft_adjoint, nfft_adjoint
+from ..kernels import KERNELS
+kernel_types = sorted(KERNELS.keys())
 
 
 def generate_data(N, Nf, amp=1, rseed=0):
@@ -25,11 +27,12 @@ def generate_adjoint_data(N, amp=1, rseed=0):
 @pytest.mark.parametrize('sigma', [2, 3, 4, 5])
 @pytest.mark.parametrize('use_fft', [True, False])
 @pytest.mark.parametrize('truncated', [True, False])
-def test_nfft_slow(N, Nf, sigma, use_fft, truncated):
+@pytest.mark.parametrize('kernel', kernel_types)
+def test_nfft_slow(N, Nf, sigma, use_fft, truncated, kernel):
     x, f_hat = generate_data(N, Nf)
 
     direct = ndft(x, f_hat)
-    approx = nfft(x, f_hat, sigma=sigma, tol=1E-8,
+    approx = nfft(x, f_hat, sigma=sigma, tol=1E-8, kernel=kernel,
                   use_fft=use_fft, truncated=truncated)
 
     assert_allclose(direct, approx)
@@ -40,11 +43,12 @@ def test_nfft_slow(N, Nf, sigma, use_fft, truncated):
 @pytest.mark.parametrize('tol', [1E-4, 1E-8, 1E-12])
 @pytest.mark.parametrize('amp', [1, 10, 100])
 @pytest.mark.parametrize('sigma', [2, 3, 4, 5])
-def test_nfft_tol(N, Nf, tol, amp, sigma):
+@pytest.mark.parametrize('kernel', kernel_types)
+def test_nfft_tol(N, Nf, tol, amp, sigma, kernel):
     x, f_hat = generate_data(N, Nf, amp=amp)
 
     direct = ndft(x, f_hat)
-    approx = nfft(x, f_hat, sigma=sigma, tol=tol)
+    approx = nfft(x, f_hat, sigma=sigma, tol=tol, kernel=kernel)
 
     observed_diff = abs(direct - approx)
     assert observed_diff.max() < tol * abs(direct).sum()
@@ -55,11 +59,12 @@ def test_nfft_tol(N, Nf, tol, amp, sigma):
 @pytest.mark.parametrize('sigma', [2, 3, 4, 5])
 @pytest.mark.parametrize('use_fft', [True, False])
 @pytest.mark.parametrize('truncated', [True, False])
-def test_nfft_adjoint_slow(N, Nf, sigma, use_fft, truncated):
+@pytest.mark.parametrize('kernel', kernel_types)
+def test_nfft_adjoint_slow(N, Nf, sigma, use_fft, truncated, kernel):
     x, f = generate_adjoint_data(N)
 
     direct = ndft_adjoint(x, f, Nf)
-    approx = nfft_adjoint(x, f, Nf, sigma=sigma, tol=1E-8,
+    approx = nfft_adjoint(x, f, Nf, sigma=sigma, tol=1E-8, kernel=kernel,
                           use_fft=use_fft, truncated=truncated)
 
     assert_allclose(direct, approx)
@@ -70,9 +75,10 @@ def test_nfft_adjoint_slow(N, Nf, sigma, use_fft, truncated):
 @pytest.mark.parametrize('tol', [1E-4, 1E-8, 1E-12])
 @pytest.mark.parametrize('amp', [1, 10, 100])
 @pytest.mark.parametrize('sigma', [2, 3, 4, 5])
-def test_nfft_adjoint_tol(N, Nf, tol, amp, sigma):
+@pytest.mark.parametrize('kernel', kernel_types)
+def test_nfft_adjoint_tol(N, Nf, tol, amp, sigma, kernel):
     x, f = generate_adjoint_data(N, amp=amp)
     direct = ndft_adjoint(x, f, Nf)
-    approx = nfft_adjoint(x, f, Nf, sigma=sigma, tol=tol)
+    approx = nfft_adjoint(x, f, Nf, sigma=sigma, tol=tol, kernel=kernel)
     observed_diff = abs(direct - approx)
     assert observed_diff.max() < tol * abs(direct).sum()
