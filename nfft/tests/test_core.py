@@ -25,15 +25,12 @@ def generate_adjoint_data(N, amp=1, rseed=0):
 @pytest.mark.parametrize('N', [50, 100, 200])
 @pytest.mark.parametrize('Nf', [50, 100, 200])
 @pytest.mark.parametrize('sigma', [2, 3, 4, 5])
-@pytest.mark.parametrize('use_fft', [True, False])
-@pytest.mark.parametrize('truncated', [True, False])
 @pytest.mark.parametrize('kernel', kernel_types)
-def test_nfft_slow(N, Nf, sigma, use_fft, truncated, kernel):
+def test_nfft_slow(N, Nf, sigma, kernel):
     x, f_hat = generate_data(N, Nf)
 
     direct = ndft(x, f_hat)
-    approx = nfft(x, f_hat, sigma=sigma, tol=1E-8, kernel=kernel,
-                  use_fft=use_fft, truncated=truncated)
+    approx = nfft(x, f_hat, sigma=sigma, tol=1E-8, kernel=kernel)
 
     assert_allclose(direct, approx)
 
@@ -57,15 +54,12 @@ def test_nfft_tol(N, Nf, tol, amp, sigma, kernel):
 @pytest.mark.parametrize('N', [50, 100, 200])
 @pytest.mark.parametrize('Nf', [50, 100, 200])
 @pytest.mark.parametrize('sigma', [2, 3, 4, 5])
-@pytest.mark.parametrize('use_fft', [True, False])
-@pytest.mark.parametrize('truncated', [True, False])
 @pytest.mark.parametrize('kernel', kernel_types)
-def test_nfft_adjoint_slow(N, Nf, sigma, use_fft, truncated, kernel):
+def test_nfft_adjoint_slow(N, Nf, sigma, kernel):
     x, f = generate_adjoint_data(N)
 
     direct = ndft_adjoint(x, f, Nf)
-    approx = nfft_adjoint(x, f, Nf, sigma=sigma, tol=1E-8, kernel=kernel,
-                          use_fft=use_fft, truncated=truncated)
+    approx = nfft_adjoint(x, f, Nf, sigma=sigma, tol=1E-8, kernel=kernel)
 
     assert_allclose(direct, approx)
 
