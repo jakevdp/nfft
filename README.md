@@ -4,7 +4,7 @@
   http://img.shields.io/travis/jakevdp/nfft/master.svg?style=flat)](
  https://travis-ci.org/jakevdp/nfft/)
 
-The ``nfft`` package is a pure-Python implementation of the non-equispaced
+The ``nfft`` package is a lightweight implementation of the non-equispaced
 fast Fourier transform (NFFT), based on numpy and scipy and released under
 an MIT license.
 For information about the NFFT algorithm, see the paper
@@ -51,12 +51,13 @@ The disadvantage is that ``pynfft`` is GPL-licensed (and thus can't be used
 in much of the more permissively licensed Python scientific world), and has
 a much more complicated set of dependencies.
 
-Performance-wise, ``nfft`` and ``pynfft`` are comparable, with this pure-Python
-package being up to a factor of 2 faster in most cases of interest
-(see [Benchmarks.ipynb](notebooks/Benchmarks.ipynb) for some simple
-benchmarks).
+Performance-wise, ``nfft`` and ``pynfft`` are comparable, with the
+implementation within ``nfft`` package being up to a factor of 2 faster
+in most cases of interest (see [Benchmarks.ipynb](notebooks/Benchmarks.ipynb)
+for some simple benchmarks).
 
-If you're curious how the pure-Python ``nfft`` is implemented, see the [Implementation Walkthrough](notebooks/ImplementationWalkthrough.ipynb) notebook.
+If you're curious how ``nfft`` is implemented, see the [Implementation
+Walkthrough](notebooks/ImplementationWalkthrough.ipynb) notebook.
 
 
 
