@@ -1,8 +1,7 @@
 # nfft package
 
-[![build status](
-  http://img.shields.io/travis/jakevdp/nfft/master.svg?style=flat)](
- https://travis-ci.org/jakevdp/nfft/)
+[![build status](http://img.shields.io/travis/jakevdp/nfft/master.svg?style=flat)](https://travis-ci.org/jakevdp/nfft/)[![version status](http://img.shields.io/pypi/v/nfft.svg?style=flat)](https://pypi.python.org/pypi/nfft)
+[![license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/jakevdp/nfft/blob/master/LICENSE)
 
 The ``nfft`` package is a lightweight implementation of the non-equispaced
 fast Fourier transform (NFFT), based on numpy and scipy and released under
