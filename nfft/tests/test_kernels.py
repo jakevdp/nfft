@@ -23,3 +23,14 @@ def test_kernel_fft(kernel, sigma, n, m):
     f_fft = (1. / n) * np.fft.fftshift(np.fft.fft(np.fft.fftshift(f)))
 
     assert_allclose(f_hat, f_fft, atol=1E-12)
+
+
+@pytest.mark.parametrize('kernel', kernel_types)
+@pytest.mark.parametrize('sigma', [2, 3])
+def test_kernel_m_C(kernel, sigma):
+    kernel = KERNELS[kernel]
+    m = np.arange(1, 100)
+    C = kernel.C(m, sigma)
+    m2 = kernel.m_from_C(C, sigma).astype(int)
+    assert_allclose(m, m2, atol=1)  # atol=1 for float->int rounding errors
+    
