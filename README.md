@@ -86,8 +86,8 @@ $ pytest --pyargs nfft
 ## Usage
 
 ```python
-# Make some data
 import numpy as np
+from nfft import nfft
 
 # define evaluation points
 x = -0.5 + np.random.rand(1000)
@@ -98,7 +98,7 @@ k = N // 2 + np.arange(N)
 f_k = np.random.randn(N)
 
 # non-equispaced fast Fourier transform
-f = nfft.nfft(x, f_k)
+f = nfft(x, f_k)
 ```
 
 For some more examples, see the notebooks in the [notebooks](notebooks)
