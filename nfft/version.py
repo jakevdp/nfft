@@ -29,15 +29,15 @@ CLASSIFIERS = ["Development Status :: 3 - Alpha",
                "Topic :: Scientific/Engineering"]
 
 # Description should be a one-liner:
-description = "nfft: pure-python nonuniform fast Fourier transform"
+description = "nfft: pure-python non-equispaced fast Fourier transform"
 # Long description will go up on the pypi page
 long_description = """
 
 nfft package
 ============
-nfft is a pure-python implementation of the nonuniform fast Fourier transform.
-Its performance is comparable to that of pynfft_, but it contains no compiled
-code and requires no links to external C libraries, beyond standard
+nfft is a pure-python implementation of the non-equispaced fast Fourier
+transform. Its performance is comparable to that of pynfft_, but it contains
+no compiled code and requires no links to external C libraries, beyond standard
 dependencies on numpy_ and scipy_.
 
 For more information and links to usage examples, please see the

@@ -7,7 +7,7 @@ from .utils import nfft_matrix, fourier_sum, inv_fourier_sum
 
 
 def ndft(x, f_hat):
-    """Compute the nonuniform direct Fourier transform
+    """Compute the non-equispaced direct Fourier transform
 
     f_j = \sum_{-N/2 \le k < N/2} \hat{f}_k \exp(-2 \pi i k x_j)
 
@@ -25,9 +25,9 @@ def ndft(x, f_hat):
 
     See Also
     --------
-    nfft : nonuniform fast Fourier transform
-    ndft_adjoint : adjoint nonuniform direct Fourier transform
-    nfft_adjoint : adjoint nonuniform fast Fourier transform
+    nfft : non-equispaced fast Fourier transform
+    ndft_adjoint : adjoint non-equispaced direct Fourier transform
+    nfft_adjoint : adjoint non-equispaced fast Fourier transform
     """
     x, f_hat = map(np.asarray, (x, f_hat))
     assert x.ndim == 1
@@ -41,7 +41,7 @@ def ndft(x, f_hat):
 
 
 def ndft_adjoint(x, f, N):
-    """Compute the adjoint nonuniform direct Fourier transform
+    """Compute the adjoint non-equispaced direct Fourier transform
 
     \hat{f}_k = \sum_{0 \le j < N} f_j \exp(2 \pi i k x_j)
 
@@ -63,9 +63,9 @@ def ndft_adjoint(x, f, N):
 
     See Also
     --------
-    nfft_adjoint : adjoint nonuniform fast Fourier transform
-    ndft : nonuniform direct Fourier transform
-    nfft : nonuniform fast Fourier transform
+    nfft_adjoint : adjoint non-equispaced fast Fourier transform
+    ndft : non-equispaced direct Fourier transform
+    nfft : non-equispaced fast Fourier transform
     """
     x, f = np.broadcast_arrays(x, f)
     assert x.ndim == 1
@@ -79,7 +79,7 @@ def ndft_adjoint(x, f, N):
 
 def nfft(x, f_hat, sigma=3, tol=1E-8, m=None, kernel='gaussian',
          use_fft=True, truncated=True):
-    """Compute the nonuniform fast Fourier transform
+    """Compute the non-equispaced fast Fourier transform
 
     f_j = \sum_{-N/2 \le k < N/2} \hat{f}_k \exp(-2 \pi i k x_j)
 
@@ -112,9 +112,9 @@ def nfft(x, f_hat, sigma=3, tol=1E-8, m=None, kernel='gaussian',
 
     See Also
     --------
-    ndft : nonuniform direct Fourier transform
-    nfft_adjoint : adjoint nonuniform fast Fourier transform
-    ndft_adjoint : adjoint nonuniform direct Fourier transform
+    ndft : non-equispaced direct Fourier transform
+    nfft_adjoint : adjoint non-equispaced fast Fourier transform
+    ndft_adjoint : adjoint non-equispaced direct Fourier transform
     """
     # Validate inputs
     x, f_hat = map(np.asarray, (x, f_hat))
@@ -149,7 +149,7 @@ def nfft(x, f_hat, sigma=3, tol=1E-8, m=None, kernel='gaussian',
 
 def nfft_adjoint(x, f, N, sigma=3, tol=1E-8, m=None, kernel='gaussian',
                  use_fft=True, truncated=True):
-    """Compute the adjoint nonuniform fast Fourier transform
+    """Compute the adjoint non-equispaced fast Fourier transform
 
     \hat{f}_k = \sum_{0 \le j < N} f_j \exp(2 \pi i k x_j)
 
@@ -186,9 +186,9 @@ def nfft_adjoint(x, f, N, sigma=3, tol=1E-8, m=None, kernel='gaussian',
 
     See Also
     --------
-    ndft_adjoint : adjoint nonuniform direct Fourier transform
-    nfft : nonuniform fast Fourier transform
-    ndft : nonuniform direct Fourier transform
+    ndft_adjoint : adjoint non-equispaced direct Fourier transform
+    nfft : non-equispaced fast Fourier transform
+    ndft : non-equispaced direct Fourier transform
     """
     # Validate inputs
     x, f = np.broadcast_arrays(x, f)

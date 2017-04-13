@@ -4,7 +4,7 @@
   http://img.shields.io/travis/jakevdp/nfft/master.svg?style=flat)](
  https://travis-ci.org/jakevdp/nfft/)
 
-The ``nfft`` package is a pure-Python implementation of the non-uniform
+The ``nfft`` package is a pure-Python implementation of the non-equispaced
 fast Fourier transform (NFFT), based on numpy and scipy and released under
 an MIT license.
 For information about the NFFT algorithm, see the paper
@@ -15,7 +15,7 @@ For information about the NFFT algorithm, see the paper
 ## About
 
 The ``nfft`` package implements one-dimensional versions of the forward and
-adjoint nonuniform fast Fourier transforms;
+adjoint non-equispaced fast Fourier transforms;
 
 The forward transform:
 
@@ -31,10 +31,10 @@ while the data values *x_j* are irregularly spaced between -1/2 and 1/2.
 The direct and fast version of these algorithms are implemented in the following
 functions:
 
-- ``nfft.ndft``: nonuniform Fourier transform
-- ``nfft.nfft``: nonuniform Fourier transform
-- ``nfft.ndft_adjoint``: adjoint direct Fourier transform
-- ``nfft.nfft_adjoint``: adjoint fast Fourier transform
+- ``nfft.ndft``: direct forward non-equispaced Fourier transform
+- ``nfft.nfft``: fast forward non-equispaced Fourier transform
+- ``nfft.ndft_adjoint``: direct adjoint non-equispaced Fourier transform
+- ``nfft.nfft_adjoint``: fast adjoint non-equispacedFourier transform
 
 
 
