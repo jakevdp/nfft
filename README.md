@@ -112,3 +112,14 @@ directory.
 
 This code is released under the [MIT License](LICENSE). For more information,
 see the [Open Source Initiative](https://opensource.org/licenses/MIT)
+
+
+
+## Support
+
+Development of this package is supported by the
+[UW eScience Institute](http://escience.washington.edu/),
+with funding from
+the [Gordon & Betty Moore Foundation](https://www.moore.org/),
+the [Alfred P. Sloan Foundation](https://sloan.org/),
+and the [Washington Research Foundation](http://www.wrfseattle.org/)
