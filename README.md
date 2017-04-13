@@ -56,7 +56,7 @@ package being up to a factor of 2 faster in most cases of interest
 (see [Benchmarks.ipynb](notebooks/Benchmarks.ipynb) for some simple
 benchmarks).
 
-If you're curious how this is implemented, see the [Implementation Walkthrough](notebooks/ImplementationWalkthrough.ipynb) notebook.
+If you're curious how the pure-Python ``nfft`` is implemented, see the [Implementation Walkthrough](notebooks/ImplementationWalkthrough.ipynb) notebook.
 
 
 
