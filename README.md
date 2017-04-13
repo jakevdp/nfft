@@ -83,9 +83,25 @@ $ pytest --pyargs nfft
 
 
 
-## Examples
+## Usage
 
-For some basic usage examples, see the notebooks in the [notebooks](notebooks)
+```python
+# Make some data
+import numpy as np
+
+# define evaluation points
+x = -0.5 + np.random.rand(1000)
+
+# define Fourier coefficients
+N = 10000
+k = N // 2 + np.arange(N)
+f_k = np.random.randn(N)
+
+# non-equispaced fast Fourier transform
+f = nfft.nfft(x, f_k)
+```
+
+For some more examples, see the notebooks in the [notebooks](notebooks)
 directory.
 
 
