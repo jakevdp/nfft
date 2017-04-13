@@ -68,7 +68,7 @@ The ``nfft`` package can be installded directly from the Python Package Index:
 $ pip install nfft
 ```
 
-Dependencies are [numpy](http://www.numpy.org), [scipy](http://www.scipy.org), and [pytest](http://www.pytest.org).
+Dependencies are [numpy](http://www.numpy.org), [scipy](http://www.scipy.org), and [pytest](http://www.pytest.org), and tests are run in Python versions 2.7. 3.5, and 3.6.
 
 
 
