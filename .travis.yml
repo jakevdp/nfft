@@ -14,7 +14,8 @@ env:
     - REQUIREMENTS="numpy scipy pytest coverage codecov pytest-cov"
 
 before_install:
-  - pip install $REQUIREMENTS
+  - pip install --upgrade pip setuptools wheel
+  - pip install --only-binary=numpy,scipy $REQUIREMENTS
 
 install:
   - python setup.py install
