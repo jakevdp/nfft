@@ -4,10 +4,17 @@
 [![license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/jakevdp/nfft/blob/master/LICENSE)
 
 The ``nfft`` package is a lightweight implementation of the non-equispaced
-fast Fourier transform (NFFT), based on numpy and scipy and released under
-an MIT license.
+fast Fourier transform (NFFT), implemented via numpy and scipy and released
+under the MIT license.
 For information about the NFFT algorithm, see the paper
 [*Using NFFT 3 – a software library for various nonequispaced fast Fourier transforms*](http://dl.acm.org/citation.cfm?id=1555388).
+
+The ``nfft`` package achieves comparable performance to the C package
+described in that paper, without any customized compiled code. Rather, it
+makes use of the computational building blocks available in NumPy and SciPy.
+For a discussion of the algorithm and this implementation, see the
+[Implementation Walkthrough](notebooks/ImplementationWalkthrough.ipynb)
+notebook.
 
 
 
