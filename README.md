@@ -42,7 +42,7 @@ functions:
 - ``nfft.ndft_adjoint``: direct adjoint non-equispaced Fourier transform
 - ``nfft.nfft_adjoint``: fast adjoint non-equispacedFourier transform
 
-## Computational complexity
+### Computational complexity
 
 The discrete version of each transform has a computational complexity of
 approximately *O[NM]*, while the NFFT has a computational complexity of
@@ -50,14 +50,14 @@ approximately *O[N log(N) + M log(1/ϵ)]*, where *ϵ* is the desired precision
 of the result. In the current implementation, memory requirements scale as
 approximately  *O[N + M log(1/ϵ)]*.
 
-## Comparison to pynfft
+### Comparison to pynfft
 
 Another option for computing the NFFT in Python is to use the
 [pynfft](https://github.com/ghisvail/pyNFFT/) package, which provides a
 Python wrapper to the C library referenced in the above paper.
-
-The advantage of ``pynfft`` is that it provides a more complete set of
-routines, including multi-dimensional NFFTs and various computing strategies.
+The advantage of ``pynfft`` is that, compared to ``nfft``, it provides a more
+complete set of routines, including multi-dimensional NFFTs, several related
+extensions, and a range of computing strategies.
 
 The disadvantage is that ``pynfft`` is GPL-licensed (and thus can't be used
 in much of the more permissively licensed Python scientific world), and has
@@ -68,8 +68,30 @@ implementation within ``nfft`` package being up to a factor of 2 faster
 in most cases of interest (see [Benchmarks.ipynb](notebooks/Benchmarks.ipynb)
 for some simple benchmarks).
 
-If you're curious how ``nfft`` is implemented, see the [Implementation
+If you're curious about the implementation and how ``nfft`` attains such
+performance without a custom compiled extension, see the [Implementation
 Walkthrough](notebooks/ImplementationWalkthrough.ipynb) notebook.
+
+### Basic Usage
+
+```python
+import numpy as np
+from nfft import nfft
+
+# define evaluation points
+x = -0.5 + np.random.rand(1000)
+
+# define Fourier coefficients
+N = 10000
+k = N // 2 + np.arange(N)
+f_k = np.random.randn(N)
+
+# non-equispaced fast Fourier transform
+f = nfft(x, f_k)
+```
+
+For some more examples, see the notebooks in the [notebooks](notebooks)
+directory.
 
 
 
@@ -93,31 +115,6 @@ Unit tests can be run using [pytest](http://pytest.org):
 ```
 $ pytest --pyargs nfft
 ```
-
-
-
-## Usage
-
-```python
-import numpy as np
-from nfft import nfft
-
-# define evaluation points
-x = -0.5 + np.random.rand(1000)
-
-# define Fourier coefficients
-N = 10000
-k = N // 2 + np.arange(N)
-f_k = np.random.randn(N)
-
-# non-equispaced fast Fourier transform
-f = nfft(x, f_k)
-```
-
-For some more examples, see the notebooks in the [notebooks](notebooks)
-directory.
-
-
 
 
 ## License
