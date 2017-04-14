@@ -25,7 +25,7 @@ adjoint non-equispaced fast Fourier transforms;
 
 The forward transform:
 
-![$f_j = \sum_{j=0}^{M-1} f_k e^{-2\pi i k x_j}$](figures/forward-formula.png)
+![$f_j = \sum_{k=0}^{N-1} \hat{f}_k e^{-2\pi i k x_j}$](figures/forward-formula.png)
 
 And the adjoint transform:
 
