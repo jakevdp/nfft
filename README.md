@@ -83,7 +83,7 @@ x = -0.5 + np.random.rand(1000)
 
 # define Fourier coefficients
 N = 10000
-k = N // 2 + np.arange(N)
+k = - N // 2 + np.arange(N)
 f_k = np.random.randn(N)
 
 # non-equispaced fast Fourier transform
