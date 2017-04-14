@@ -33,7 +33,6 @@ And the adjoint transform:
 
 In both cases, the wavenumbers *k* are on a regular grid from -N/2 to N/2,
 while the data values *x_j* are irregularly spaced between -1/2 and 1/2.
-The complexity of the NFFT algorithm is 
 
 The direct and fast version of these algorithms are implemented in the following
 functions:
