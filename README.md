@@ -40,11 +40,11 @@ functions:
 - ``nfft.ndft``: direct forward non-equispaced Fourier transform
 - ``nfft.nfft``: fast forward non-equispaced Fourier transform
 - ``nfft.ndft_adjoint``: direct adjoint non-equispaced Fourier transform
-- ``nfft.nfft_adjoint``: fast adjoint non-equispacedFourier transform
+- ``nfft.nfft_adjoint``: fast adjoint non-equispaced Fourier transform
 
 ### Computational complexity
 
-The discrete version of each transform has a computational complexity of
+The direct version of each transform has a computational complexity of
 approximately *O[NM]*, while the NFFT has a computational complexity of
 approximately *O[N log(N) + M log(1/ϵ)]*, where *ϵ* is the desired precision
 of the result. In the current implementation, memory requirements scale as
