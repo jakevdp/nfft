@@ -46,6 +46,38 @@ class GaussianKernel(NFFTKernel):
         return np.ceil(-np.log(0.25 * C) / (np.pi * (1 - 1 / (2 * sigma - 1))))
 
 
+class GaussianKernelND(NFFTKernel):
+    def _b(self, sigma, m):
+        return (2 * sigma * m) / ((2 * sigma - 1) * np.pi)
+
+    def phi(self, x, n, m, sigma):
+        x = np.asarray(x)
+        if x.ndim == 1:
+            x = x[:, None]
+        n = np.broadcast_to(n, x.shape[-1])
+        m = np.broadcast_to(m, x.shape[-1])
+        b = self._b(sigma, m)
+        print(x.shape, n.shape, m.shape, b.shape)
+        return np.exp(-np.sum((n * x) ** 2 / b, -1)) / np.sqrt(np.pi * np.prod(b, -1))
+
+    def phi_hat(self, k, n, m, sigma):
+        k = np.asarray(k)
+        if k.ndim == 1:
+            k = k[:, None]
+        n = np.broadcast_to(n, k.shape[-1])
+        m = np.broadcast_to(m, k.shape[-1])
+        b = self._b(sigma, m)
+        return np.exp(-np.sum(b * (np.pi * k / n) ** 2, -1)) / np.prod(n, -1)
+
+    def C(self, m, sigma):
+        # TODO: make this work for D dimensions
+        return 4 * np.exp(-m * np.pi * (1 - 1. / (2 * sigma - 1)))
+
+    def m_from_C(self, C, sigma):
+        # TODO: make this work for D dimensions
+        return np.ceil(-np.log(0.25 * C) / (np.pi * (1 - 1 / (2 * sigma - 1))))
+
+
 # Kaiser-Bessel Kernel. Seems to have some issues with overflow
 
 # class KaiserBesselKernel(NFFTKernel):
@@ -87,3 +119,4 @@ class GaussianKernel(NFFTKernel):
 
 
 KERNELS = dict(gaussian=GaussianKernel())
+NDKERNELS = dict(gaussian=GaussianKernelND())
