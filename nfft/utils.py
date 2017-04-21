@@ -4,7 +4,7 @@ import numpy as np
 
 from scipy import fftpack, sparse
 
-from .kernels import KERNELS, NDKERNELS, NFFTKernel
+from .kernels import KERNELS, NFFTKernel
 
 
 def shifted(x):
@@ -13,53 +13,6 @@ def shifted(x):
 
 
 def nfft_matrix(x, n, m, sigma, kernel, truncated):
-    """Compute the nfft matrix
-
-    This is the matrix that encodes the (truncated) convolution that projects
-    the irregularly-sampled data onto a regular grid.
-
-    Parameters
-    ----------
-    x : ndarray, shape=M
-        the array of coordinates in the range [-1/2, 1/2)
-    n : int
-        the size of the oversampled frequency grid
-    m : int
-        the half-width of the truncated convolution window.
-        Only referenced if truncated is True.
-    sigma : int
-        oversampling factor
-    kernel : string or NFFTKernel object
-        the object providing the kernel interface
-    truncated : boolean
-        if True, then return the sparse, truncated matrix based on ``m``.
-        if False, then return the full convolution matrix.
-
-    Returns
-    -------
-    mat : ndarray or csr_matrix
-        The [len(x), n] nfft matrix. If truncated is True, then the result
-        is a sparse CSR matrix representing the truncated convolution.
-        If truncated is False, the result is a dense array.
-    """
-    kernel = KERNELS.get(kernel, kernel)
-    assert isinstance(kernel, NFFTKernel)
-
-    if truncated:
-        col_ind = np.floor(n * x[:, np.newaxis]).astype(int) + np.arange(-m, m)
-        val = kernel.phi(shifted(x[:, None] - col_ind / n), n, m, sigma)
-        col_ind = (col_ind + n // 2) % n
-        indptr = np.arange(len(x) + 1) * col_ind.shape[1]
-        mat = sparse.csr_matrix((val.ravel(), col_ind.ravel(), indptr),
-                                shape=(len(x), n))
-    else:
-        x_grid = np.linspace(-0.5, 0.5, n, endpoint=False)
-        mat = kernel.phi(shifted(x_grid - x[:, None]), n, m, sigma)
-
-    return mat
-
-
-def nfft_matrix_nd(x, n, m, sigma, kernel, truncated):
     """Compute the nfft matrix
 
     This is the matrix that encodes the (truncated) convolution that projects
@@ -90,10 +43,12 @@ def nfft_matrix_nd(x, n, m, sigma, kernel, truncated):
         M * prod(m) nonzero components. If truncated is False, the result is
         a dense array.
     """
-    kernel = NDKERNELS.get(kernel, kernel)
+    kernel = KERNELS.get(kernel, kernel)
     assert isinstance(kernel, NFFTKernel)
 
-    x = np.atleast_2d(x)
+    x = np.atleast_1d(x)
+    if x.ndim == 1:
+        x = x[:, None]
     n = np.atleast_1d(n)
     m = np.atleast_1d(m)
 

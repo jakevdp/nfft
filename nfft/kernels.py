@@ -32,26 +32,7 @@ class GaussianKernel(NFFTKernel):
         return (2 * sigma * m) / ((2 * sigma - 1) * np.pi)
 
     def phi(self, x, n, m, sigma):
-        b = self._b(sigma, m)
-        return np.exp(-(n * x) ** 2 / b) / np.sqrt(np.pi * b)
-
-    def phi_hat(self, k, n, m, sigma):
-        b = self._b(sigma, m)
-        return np.exp(-b * (np.pi * k / n) ** 2) / n
-
-    def C(self, m, sigma):
-        return 4 * np.exp(-m * np.pi * (1 - 1. / (2 * sigma - 1)))
-
-    def m_from_C(self, C, sigma):
-        return np.ceil(-np.log(0.25 * C) / (np.pi * (1 - 1 / (2 * sigma - 1))))
-
-
-class GaussianKernelND(NFFTKernel):
-    def _b(self, sigma, m):
-        return (2 * sigma * m) / ((2 * sigma - 1) * np.pi)
-
-    def phi(self, x, n, m, sigma):
-        x = np.asarray(x)
+        x = np.atleast_1d(x)
         if x.ndim == 1:
             x = x[:, None]
         n = np.broadcast_to(n, x.shape[-1])
@@ -61,7 +42,7 @@ class GaussianKernelND(NFFTKernel):
         return phi
 
     def phi_hat(self, k, n, m, sigma):
-        k = np.asarray(k)
+        k = np.atleast_1d(k)
         if k.ndim == 1:
             k = k[:, None]
         n = np.broadcast_to(n, k.shape[-1])
@@ -120,4 +101,3 @@ class GaussianKernelND(NFFTKernel):
 
 
 KERNELS = dict(gaussian=GaussianKernel())
-NDKERNELS = dict(gaussian=GaussianKernelND())

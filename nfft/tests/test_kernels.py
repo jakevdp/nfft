@@ -3,14 +3,14 @@ import numpy as np
 from numpy.testing import assert_allclose
 import pytest
 
-from ..kernels import KERNELS, NDKERNELS
+from ..kernels import KERNELS
 kernel_types = sorted(KERNELS.keys())
 
 
 @pytest.mark.parametrize('method', ['phi', 'phi_hat'])
 @pytest.mark.parametrize('kernel', kernel_types)
 def test_ndkernel_input_dimensions(kernel, method, n=100, m=10, sigma=2):
-    kernel = NDKERNELS.get(kernel)
+    kernel = KERNELS.get(kernel)
     method = getattr(kernel, method)
 
     # test 1D variants

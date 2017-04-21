@@ -1,6 +1,6 @@
 import numpy as np
 
-from ..utils import nfft_matrix, nfft_matrix_nd, fourier_sum, inv_fourier_sum
+from ..utils import nfft_matrix, fourier_sum, inv_fourier_sum
 from ..kernels import KERNELS
 
 from numpy.testing import assert_allclose
@@ -35,7 +35,7 @@ def test_nfft_matrix_large_m(N, sigma, kernel, rseed=0):
     m = n // 2
 
     mat1 = nfft_matrix(x, n, m, sigma, kernel, truncated=False)
-    mat2 = nfft_matrix_nd(x[:, None], n, m, sigma, kernel, truncated=True)
+    mat2 = nfft_matrix(x[:, None], n, m, sigma, kernel, truncated=True)
 
     assert_allclose(mat1, mat2.toarray())
 
@@ -51,7 +51,7 @@ def test_nfft_matrix_nd_vs_nfft_matrix(N, sigma, kernel, truncated, rseed=0):
     m = n // 2
 
     mat1 = nfft_matrix(x, n, m, sigma, kernel, truncated=truncated)
-    mat2 = nfft_matrix_nd(x[:, None], n, m, sigma, kernel, truncated=truncated)
+    mat2 = nfft_matrix(x[:, None], n, m, sigma, kernel, truncated=truncated)
 
     if truncated:
         assert_allclose(mat1.toarray(), mat2.toarray())
