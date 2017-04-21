@@ -25,6 +25,8 @@ def nfft_matrix(x, n, m, sigma, kernel, truncated):
     m : int
         the half-width of the truncated convolution window.
         Only referenced if truncated is True.
+    sigma : int
+        oversampling factor
     kernel : NFFTKernel object
         the object providing the kernel interface
     truncated : boolean
