@@ -18,7 +18,6 @@ def test_nfft_matrix_shape_nnz(N, sigma, m, kernel, rseed=0):
     rand = np.random.RandomState(rseed)
     x = -0.5 + rand.rand(N)
     n = sigma * N
-    kernel = KERNELS[kernel]
 
     mat = nfft_matrix(x, n, m, sigma, kernel, truncated=True)
     assert mat.shape == (len(x), n)
@@ -34,12 +33,31 @@ def test_nfft_matrix_large_m(N, sigma, kernel, rseed=0):
     x = -0.5 + rand.rand(N)
     n = sigma * N
     m = n // 2
-    kernel = KERNELS[kernel]
 
     mat1 = nfft_matrix(x, n, m, sigma, kernel, truncated=False)
-    mat2 = nfft_matrix(x, n, m, sigma, kernel, truncated=True)
+    mat2 = nfft_matrix(x[:, None], n, m, sigma, kernel, truncated=True)
 
     assert_allclose(mat1, mat2.toarray())
+
+
+@pytest.mark.parametrize('N', [50, 100, 200])
+@pytest.mark.parametrize('sigma', [2, 3, 4])
+@pytest.mark.parametrize('kernel', kernel_types)
+@pytest.mark.parametrize('truncated', [True, False])
+def test_nfft_matrix_nd_vs_nfft_matrix(N, sigma, kernel, truncated, rseed=0):
+    rand = np.random.RandomState(rseed)
+    x = -0.5 + rand.rand(N)
+    n = sigma * N
+    m = n // 2
+
+    mat1 = nfft_matrix(x, n, m, sigma, kernel, truncated=truncated)
+    mat2 = nfft_matrix(x[:, None], n, m, sigma, kernel, truncated=truncated)
+
+    if truncated:
+        assert_allclose(mat1.toarray(), mat2.toarray())
+    else:
+        assert_allclose(mat1, mat2)
+
 
 
 @pytest.mark.parametrize('N', [50, 100, 200])

@@ -141,7 +141,7 @@ def nfft(x, f_hat, sigma=3, tol=1E-8, m=None, kernel='gaussian',
     # Compute the NFFT
     ghat = f_hat / kernel.phi_hat(k, n, m, sigma) / n
     g = fourier_sum(ghat, N, n, use_fft=use_fft)
-    mat = nfft_matrix(x, n, m, sigma, kernel, truncated=truncated)
+    mat = nfft_matrix(x[:, None], n, m, sigma, kernel, truncated=truncated)
     f = mat.dot(g)
 
     return f
@@ -212,7 +212,7 @@ def nfft_adjoint(x, f, N, sigma=3, tol=1E-8, m=None, kernel='gaussian',
     k = -(N // 2) + np.arange(N)
 
     # Compute the adjoint NFFT
-    mat = nfft_matrix(x, n, m, sigma, kernel, truncated=truncated)
+    mat = nfft_matrix(x[:, None], n, m, sigma, kernel, truncated=truncated)
     g = mat.T.dot(f)
     ghat = inv_fourier_sum(g, N, n, use_fft=use_fft)
     fhat = ghat / kernel.phi_hat(k, n, m, sigma) / n
