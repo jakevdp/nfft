@@ -3,8 +3,33 @@ import numpy as np
 from numpy.testing import assert_allclose
 import pytest
 
-from ..kernels import KERNELS
+from ..kernels import KERNELS, NDKERNELS
 kernel_types = sorted(KERNELS.keys())
+
+
+@pytest.mark.parametrize('method', ['phi', 'phi_hat'])
+@pytest.mark.parametrize('kernel', kernel_types)
+def test_ndkernel_input_dimensions(kernel, method, n=100, m=10, sigma=2):
+    kernel = NDKERNELS.get(kernel)
+    method = getattr(kernel, method)
+
+    # test 1D variants
+    x = np.random.rand(12)
+    k1 = method(x, n, m, sigma)
+    k2 = method(x[:, None], n, m, sigma)
+    assert_allclose(k1, k2)
+
+    k3 = method(x.reshape(3, 4, 1), n, m, sigma)
+    assert_allclose(k2, k3.ravel())
+
+    # test 2D variants
+    x = np.random.rand(12, 3)
+    k1 = method(x, n, m, sigma)
+    k2 = method(x.reshape(3, 4, 3), n, m, sigma)
+    assert_allclose(k1, k2.ravel())
+
+    k3 = method(x, n + np.zeros(3), m + np.zeros(3), sigma)
+    assert_allclose(k1, k3)
 
 
 @pytest.mark.parametrize('kernel', kernel_types)
@@ -33,4 +58,3 @@ def test_kernel_m_C(kernel, sigma):
     C = kernel.C(m, sigma)
     m2 = kernel.m_from_C(C, sigma).astype(int)
     assert_allclose(m, m2, atol=1)  # atol=1 for float->int rounding errors
-    

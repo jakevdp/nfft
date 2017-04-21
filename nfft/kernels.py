@@ -57,8 +57,8 @@ class GaussianKernelND(NFFTKernel):
         n = np.broadcast_to(n, x.shape[-1])
         m = np.broadcast_to(m, x.shape[-1])
         b = self._b(sigma, m)
-        print(x.shape, n.shape, m.shape, b.shape)
-        return np.exp(-np.sum((n * x) ** 2 / b, -1)) / np.sqrt(np.pi * np.prod(b, -1))
+        phi = np.exp(-np.sum((n * x) ** 2 / b, -1)) / np.sqrt(np.pi * np.prod(b, -1))
+        return phi
 
     def phi_hat(self, k, n, m, sigma):
         k = np.asarray(k)
@@ -67,7 +67,8 @@ class GaussianKernelND(NFFTKernel):
         n = np.broadcast_to(n, k.shape[-1])
         m = np.broadcast_to(m, k.shape[-1])
         b = self._b(sigma, m)
-        return np.exp(-np.sum(b * (np.pi * k / n) ** 2, -1)) / np.prod(n, -1)
+        phi_hat = np.exp(-np.sum(b * (np.pi * k / n) ** 2, -1)) / np.prod(n, -1)
+        return phi_hat
 
     def C(self, m, sigma):
         # TODO: make this work for D dimensions
