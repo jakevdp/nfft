@@ -4,6 +4,8 @@ import numpy as np
 
 from scipy import fftpack, sparse
 
+from .kernels import KERNELS, NDKERNELS, NFFTKernel
+
 
 def shifted(x):
     """Shift x values to the range [-0.5, 0.5)"""
@@ -27,7 +29,7 @@ def nfft_matrix(x, n, m, sigma, kernel, truncated):
         Only referenced if truncated is True.
     sigma : int
         oversampling factor
-    kernel : NFFTKernel object
+    kernel : string or NFFTKernel object
         the object providing the kernel interface
     truncated : boolean
         if True, then return the sparse, truncated matrix based on ``m``.
@@ -40,6 +42,9 @@ def nfft_matrix(x, n, m, sigma, kernel, truncated):
         is a sparse CSR matrix representing the truncated convolution.
         If truncated is False, the result is a dense array.
     """
+    kernel = KERNELS.get(kernel, kernel)
+    assert isinstance(kernel, NFFTKernel)
+
     if truncated:
         col_ind = np.floor(n * x[:, np.newaxis]).astype(int) + np.arange(-m, m)
         val = kernel.phi(shifted(x[:, None] - col_ind / n), n, m, sigma)
@@ -71,7 +76,7 @@ def nfft_matrix_nd(x, n, m, sigma, kernel, truncated):
         Only referenced if truncated is True.
     sigma : int
         oversampling factor
-    kernel : NFFTKernel object
+    kernel : string or NFFTKernel object
         the object providing the kernel interface
     truncated : boolean
         if True, then return the sparse, truncated matrix based on ``m``.
@@ -85,6 +90,9 @@ def nfft_matrix_nd(x, n, m, sigma, kernel, truncated):
         M * prod(m) nonzero components. If truncated is False, the result is
         a dense array.
     """
+    kernel = NDKERNELS.get(kernel, kernel)
+    assert isinstance(kernel, NFFTKernel)
+
     x = np.atleast_2d(x)
     n = np.atleast_1d(n)
     m = np.atleast_1d(m)
