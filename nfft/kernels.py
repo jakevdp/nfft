@@ -6,6 +6,13 @@ from scipy import signal, special
 
 
 class NFFTKernel(object):
+    def _preshape_inputs(self, x, n, m):
+        x = np.atleast_1d(x)
+        if x.ndim == 1:
+            x = x[:, None]
+        reshape = lambda m: np.broadcast_to(m, x.shape[-1])
+        return x, reshape(n), reshape(m)
+
     def phi(self, x, n, m, sigma):
         raise NotImplementedError()
 
@@ -28,28 +35,18 @@ class NFFTKernel(object):
 
 
 class GaussianKernel(NFFTKernel):
-    def _b(self, sigma, m):
+    def _compute_b(self, sigma, m):
         return (2 * sigma * m) / ((2 * sigma - 1) * np.pi)
 
     def phi(self, x, n, m, sigma):
-        x = np.atleast_1d(x)
-        if x.ndim == 1:
-            x = x[:, None]
-        n = np.broadcast_to(n, x.shape[-1])
-        m = np.broadcast_to(m, x.shape[-1])
-        b = self._b(sigma, m)
-        phi = np.exp(-np.sum((n * x) ** 2 / b, -1)) / np.sqrt(np.pi * np.prod(b, -1))
-        return phi
+        x, n, m = self._preshape_inputs(x, n, m)
+        b = self._compute_b(sigma, m)
+        return np.exp(-np.dot(x ** 2, n ** 2 / b)) / np.sqrt(np.pi * np.prod(b, -1))
 
     def phi_hat(self, k, n, m, sigma):
-        k = np.atleast_1d(k)
-        if k.ndim == 1:
-            k = k[:, None]
-        n = np.broadcast_to(n, k.shape[-1])
-        m = np.broadcast_to(m, k.shape[-1])
-        b = self._b(sigma, m)
-        phi_hat = np.exp(-np.sum(b * (np.pi * k / n) ** 2, -1)) / np.prod(n, -1)
-        return phi_hat
+        k, n, m = self._preshape_inputs(k, n, m)
+        b = self._compute_b(sigma, m)
+        return np.exp(-np.dot(k ** 2, np.pi ** 2 * b / n ** 2)) / np.prod(n, -1)
 
     def C(self, m, sigma):
         # TODO: make this work for D dimensions

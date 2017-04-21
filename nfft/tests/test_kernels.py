@@ -9,18 +9,15 @@ kernel_types = sorted(KERNELS.keys())
 
 @pytest.mark.parametrize('method', ['phi', 'phi_hat'])
 @pytest.mark.parametrize('kernel', kernel_types)
-def test_ndkernel_input_dimensions(kernel, method, n=100, m=10, sigma=2):
+def test_kernel_input_dimensions(kernel, method, n=100, m=10, sigma=2):
     kernel = KERNELS.get(kernel)
     method = getattr(kernel, method)
 
     # test 1D variants
-    x = np.random.rand(12)
+    x = np.random.rand(12, 1)
     k1 = method(x, n, m, sigma)
-    k2 = method(x[:, None], n, m, sigma)
-    assert_allclose(k1, k2)
-
-    k3 = method(x.reshape(3, 4, 1), n, m, sigma)
-    assert_allclose(k2, k3.ravel())
+    k2 = method(x.reshape(3, 4, 1), n, m, sigma)
+    assert_allclose(k1, k2.ravel())
 
     # test 2D variants
     x = np.random.rand(12, 3)
