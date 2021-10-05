@@ -74,7 +74,7 @@ def ndft_adjoint(x, f, N):
     assert N % 2 == 0
 
     k = -(N // 2) + np.arange(N)
-    return np.dot(f, np.exp(2j * np.pi * k * x[:, None]))
+    return np.dot(f, np.exp(2j * np.pi * k * x[:, None])) / len(x)
 
 
 def nfft(x, f_hat, sigma=3, tol=1E-8, m=None, kernel='gaussian',
@@ -217,4 +217,4 @@ def nfft_adjoint(x, f, N, sigma=3, tol=1E-8, m=None, kernel='gaussian',
     ghat = inv_fourier_sum(g, N, n, use_fft=use_fft)
     fhat = ghat / kernel.phi_hat(k, n, m, sigma) / n
 
-    return fhat
+    return fhat / len(x)
